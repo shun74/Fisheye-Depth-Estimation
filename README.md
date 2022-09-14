@@ -53,3 +53,11 @@ Disparity calculation is performed on the transformed images. A image matching a
 ![disparity](./images/disp.png "diaparity")
 
 Once the disparity has been calculated, all that remains is to convert it to depth using a simple formula.
+
+## For more detail
+
+Detailed description of the algorithm here. (Japanese)
+
+[Logic description (Qiita)](https://qiita.com/syunnsyunn74/items/155ee816f39691f021d2)
+
+[Implement description (Qiita)](https://qiita.com/syunnsyunn74/items/6e248f7fbe87aa18e69d)
