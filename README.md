@@ -11,12 +11,22 @@ Real-time & high quality fisheye stereo 3D reconstruction.
 
 OpenCV should be compiled with [OpenEXR](https://openexr.com/en/latest/).
 
-## Build
-```
+## Build & Run
+
+1. Build
+```bash
 sh build.sh
 ```
 
-## Run
+2. Calibration
+```bash
+./build/calibration
+```
+
+3. Realtime stereo
+```bash
+./build/realtime_stereo
+```
 
 ## Result
 
