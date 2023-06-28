@@ -20,13 +20,20 @@ sh build.sh
 
 2. Calibration
 ```bash
-./build/calibration
+./build/calibration --config=<config file path> --images_dir==<calib images dir> --output=<calib data output path> --test_image=<test image path>
 ```
 
-3. Realtime stereo
+3. Test 3D reconstruction
 ```bash
-./build/realtime_stereo
+./build/test --config=<config file path> --calib=<calib data file path> --test_image=<test image path> --output_disp=<disparity image output path> --output_pcd=<point cloud output path>
 ```
+
+4. Realtime stereo
+```bash
+./build/realtime_stereo --config=<config file path> --calib=<calib data file path>
+```
+
+Some configurations required for each step. See [config files](./configs/).
 
 ## Result
 
