@@ -9,14 +9,15 @@
 
 int main(int argc, char** argv) {
 
-    std::string img_path = "images/test-1.jpg";
-    if (argc>1) img_path = argv[1];
-
+    // load config file
     std::string conf_path = "configs/test.conf";
-    if (argc>2) conf_path = argv[2];
-
     std::string calib_path = "configs/camera_params.yaml";
-    if (argc>3) calib_path = argv[3];
+    std::string img_path = "images/test-1.jpg";
+    std::map<std::string, std::string> args_map;
+    args_map = config_utils::parseArguments(argc, argv);
+    if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
+    if (args_map.find("calib")!=args_map.end()) calib_path = args_map["calib"];
+    if (args_map.find("test_image")!=args_map.end()) img_path = args_map["test_image"];
 
     // prepare for test
     cv::FileStorage fs(calib_path, cv::FileStorage::READ);

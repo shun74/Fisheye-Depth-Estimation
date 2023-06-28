@@ -5,17 +5,17 @@
 
 int main (int argc, char** argv) {
 
+    // load config file
     std::string conf_path = "configs/calibration.conf";
-    if (argc>1) conf_path = argv[1];
-
     std::string imgs_dir = "calib_images/";
-    if (argc>2) imgs_dir = argv[2];
-
     std::string save_path = "configs/camera_params.yaml";
-    if (argc>3) save_path = argv[3];
-
     std::string test_path = "images/test-1.jpg";
-    if (argc>4) test_path = argv[4];
+    std::map<std::string, std::string> args_map;
+    args_map = config_utils::parseArguments(argc, argv);
+    if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
+    if (args_map.find("images_dir")!=args_map.end()) imgs_dir = args_map["images_dir"];
+    if (args_map.find("output")!=args_map.end()) save_path = args_map["output"];
+    if (args_map.find("test_image")!=args_map.end()) test_path = args_map["test_image"];
 
     engine::CalibrationModel calib_model = engine::CalibrationModel(conf_path);
 

@@ -24,4 +24,6 @@ namespace config_utils
 
     bool parseConfigFile(std::string path, std::map<std::string, std::string> &conf_map);
 
+    std::map<std::string, std::string> parseArguments(int argc, char **argv);
+
 }

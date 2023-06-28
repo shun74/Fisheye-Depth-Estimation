@@ -9,20 +9,20 @@
 
 int main(int argc, char** argv) {
 
-    std::string img_path = "images/test-1.jpg";
-    if (argc>1) img_path = argv[1];
-
-    std::string save_disp_path = "output/test_disp.exr"; // OpenEXR recommanded
-    if (argc>2) save_disp_path = argv[2];
-
-    std::string save_pcd_path = "output/test_3d.pcd";
-    if (argc>3) save_pcd_path = argv[3];
-
+    // load config file
     std::string conf_path = "configs/test.conf";
-    if (argc>4) conf_path = argv[4];
-
     std::string calib_path = "configs/camera_params.yaml";
-    if (argc>5) calib_path = argv[5];
+    std::string img_path = "calib_images/calib-1.jpg";
+    std::string save_disp_path = "output/test_disp.exr"; // OpenEXR recommanded
+    std::string save_pcd_path = "output/test_3d.pcd";
+    std::map<std::string, std::string> args_map;
+    args_map = config_utils::parseArguments(argc, argv);
+    if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
+    if (args_map.find("calib")!=args_map.end()) calib_path = args_map["calib"];
+    if (args_map.find("test_image")!=args_map.end()) img_path = args_map["test_image"];
+    if (args_map.find("output_disp")!=args_map.end()) save_disp_path = args_map["output_disp"];
+    if (args_map.find("output_pcd")!=args_map.end()) save_pcd_path = args_map["output_pcd"];
+
 
     // prepare for test
     cv::FileStorage fs(calib_path, cv::FileStorage::READ);
