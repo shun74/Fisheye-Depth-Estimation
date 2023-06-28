@@ -15,8 +15,8 @@ void StereoVisionParams::loadParams(std::string path)
         return;
     }
 
-    img_size = config_utils::getCvSize(conf_map["image_size"]);
-    win_size = config_utils::getCvSize(conf_map["window_size"]);
+    img_size = config_utils::getCvSize<int>(conf_map["image_size"]);
+    win_size = config_utils::getCvSize<int>(conf_map["window_size"]);
     img_update_sleep = config_utils::getInt(conf_map["image_update_sleep"]);
     viewer_update_sleep = config_utils::getInt(conf_map["viewer_update_sleep"]);
     source_viewer = config_utils::getBool(conf_map["source_viewer"]);

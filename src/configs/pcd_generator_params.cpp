@@ -16,9 +16,9 @@ void PointCloudGeneratorParams::loadParams(std::string path)
     }
 
     is_fisheye = config_utils::getBool(conf_map["is_fisheye"]);
-    cv::Size x_clip = config_utils::getCvSize(conf_map["x_clip"]);
-    cv::Size y_clip = config_utils::getCvSize(conf_map["y_clip"]);
-    cv::Size z_clip = config_utils::getCvSize(conf_map["z_clip"]);
+    cv::Size_<double> x_clip = config_utils::getCvSize<double>(conf_map["x_clip"]);
+    cv::Size_<double> y_clip = config_utils::getCvSize<double>(conf_map["y_clip"]);
+    cv::Size_<double> z_clip = config_utils::getCvSize<double>(conf_map["z_clip"]);
     x_min = x_clip.width;
     x_max = x_clip.height;
     y_min = y_clip.width;

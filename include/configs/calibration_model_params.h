@@ -15,8 +15,8 @@ namespace config
 
             CameraType cam_type;
 
-            cv::Size img_size;
-            cv::Size board_size;
+            cv::Size_<int> img_size;
+            cv::Size_<int> board_size;
             double square_size;
             double fov;
 

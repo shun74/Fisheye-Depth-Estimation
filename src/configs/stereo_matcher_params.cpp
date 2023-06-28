@@ -17,7 +17,7 @@ void StereoMatcherParams::loadParams(std::string path)
 
     gray_scale = config_utils::getBool(conf_map["gray_scale"]);
     algorithm = config_utils::getString(conf_map["algorithm"]);
-    blur_kernel = config_utils::getCvSize(conf_map["blur_kernel"]);
+    blur_kernel = config_utils::getCvSize<int>(conf_map["blur_kernel"]);
     block_size = config_utils::getInt(conf_map["block_size"]);
     min_disp = config_utils::getInt(conf_map["min_disp"]);
     max_disp = config_utils::getInt(conf_map["max_disp"]);

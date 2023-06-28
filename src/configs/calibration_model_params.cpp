@@ -16,8 +16,8 @@ namespace config
         }
 
         cam_type = config_utils::getCameraType(conf_map["camera_type"]);
-        img_size = config_utils::getCvSize(conf_map["image_size"]);
-        board_size = config_utils::getCvSize(conf_map["board_size"]);
+        img_size = config_utils::getCvSize<int>(conf_map["image_size"]);
+        board_size = config_utils::getCvSize<int>(conf_map["board_size"]);
         square_size = config_utils::getDouble(conf_map["square_size"]);
         fov = config_utils::getDouble(conf_map["fov"]);
     }

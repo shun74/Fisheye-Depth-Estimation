@@ -13,8 +13,8 @@ class StereoVisionParams
             loadParams(path);
         }
 
-        cv::Size img_size;
-        cv::Size win_size;
+        cv::Size_<int> img_size;
+        cv::Size_<int> win_size;
 
         int img_update_sleep;
         int viewer_update_sleep;

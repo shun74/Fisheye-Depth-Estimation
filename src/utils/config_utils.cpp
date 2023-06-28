@@ -26,24 +26,6 @@ namespace config_utils
         return s;
     }
 
-    cv::Size getCvSize(std::string s)
-    {
-        // "[100,200]" -> cv::Size(100, 200)
-        s.erase(std::remove(s.begin(), s.end(), '['), s.end());
-        s.erase(std::remove(s.begin(), s.end(), ']'), s.end());
-
-        std::stringstream ss(s);
-        std::vector<std::string> num_s;
-        while (std::getline(ss, s, ','))
-        {
-            num_s.push_back(s);
-        }
-        if (num_s[0].find('.') == std::string::npos)
-            return cv::Size(std::stoi(num_s[0]), std::stoi(num_s[1]));
-        else
-            return cv::Size(std::stod(num_s[0]), std::stod(num_s[1]));
-    }
-
     CameraType getCameraType(std::string s)
     {
         s.erase(std::remove(s.begin(), s.end(), '\"'), s.end());

@@ -17,7 +17,7 @@ class StereoMatcherParams
 
         std::string algorithm;
 
-        cv::Size blur_kernel;
+        cv::Size_<int> blur_kernel;
 
         int block_size, min_disp, max_disp;
         int p1, p2, max_diff, pre_fc;
