@@ -56,11 +56,11 @@ Some configurations required for each step. See [config files](./configs/).
 
 * Original
 
-![original](./samples/test.jpg "original")
+<img src="./samples/test.jpg" alt="original" width="100%"/>
 
 * 3D preview ([Cloud Compare](https://www.danielgm.net/cc/))
 
-![point_cloud](./samples/preview.webp "point_cloud")
+<img src="./samples/preview.webp" alt="point_cloud" width="100%"/>
 
 
 ## How does it work ?
@@ -80,7 +80,7 @@ The required camera matrices can be acquired by photographing a specific checker
 
 * Checkerboard
 
-![checkerboard](./samples/calib_sample.jpg "checkerboard")
+<img src="./samples/calib_sample.jpg" alt="checkerboard" width="100%"/>
 
 ### Image transformation
 
@@ -92,11 +92,11 @@ Equirectangular is a graphical method commonly used in world maps, where the axe
 
 * Right after parallel lines aligned
 
-![rectify](./samples/rect.png "rectify")
+<img src="./samples/rect.png" alt="rectify" width="100%"/>
 
 * After Equirectangular transformation
 
-![eqrec](./samples/eqrec.png "eqrec")
+<img src="./samples/eqrec.png" alt="eqrec" width="100%"/>
 
 
 
@@ -105,7 +105,7 @@ Disparity calculation is performed on the transformed images. A image matching a
 
 * Disparity
 
-![disparity](./samples/disp.png "diaparity")
+<img src="./samples/disp.png" alt="disparity" width="100%"/>
 
 Once the disparity has been calculated, all that remains is to convert it to depth using a simple formula.
 
@@ -119,7 +119,7 @@ Similarly, we map the equirectangular RGB images to their recitfied coordinates 
 
 * Image to Point Cloud
 
-![cloud_compare](./samples/conversion.png)
+<img src="./samples/conversion.png" alt="cloud_compare" width="100%"/>
 
 
 ## Key Features
@@ -130,7 +130,7 @@ The clarity near the center of rectified and equirectangular images greatly diff
 
 * Rectified vs Equirectangular
 
-![comparison disparity](./samples/rect_eqrec_disparity.png)
+<img src="./samples/rect_eqrec_disparity.png" alt="comparison disparity" width="100%"/>
 
 ### Transformation Map
 
@@ -142,7 +142,8 @@ Therefore, we combined the maps of the rectified conversion and the equirectangu
 
 * High-quality equirectangular image
 
-![high-quality equirectangular](./samples/remap.png)
+<img src="./samples/remap.png" alt="high-quality equirectangular" width="100%"/>
+
 
 ## Future update
 
