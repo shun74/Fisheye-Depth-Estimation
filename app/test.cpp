@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     // load config file
     std::string conf_path = "configs/test.conf";
     std::string calib_path = "configs/camera_params.yaml";
-    std::string img_path = "calib_images/calib-1.jpg";
+    std::string img_path = "images/sample-1.jpg";
     std::string save_disp_path = "output/test_disp.exr"; // OpenEXR recommanded
     std::string save_pcd_path = "output/test_3d.pcd";
     std::map<std::string, std::string> args_map;
@@ -22,7 +22,6 @@ int main(int argc, char** argv) {
     if (args_map.find("test_image")!=args_map.end()) img_path = args_map["test_image"];
     if (args_map.find("output_disp")!=args_map.end()) save_disp_path = args_map["output_disp"];
     if (args_map.find("output_pcd")!=args_map.end()) save_pcd_path = args_map["output_pcd"];
-
 
     // prepare for test
     cv::FileStorage fs(calib_path, cv::FileStorage::READ);
@@ -41,8 +40,7 @@ int main(int argc, char** argv) {
 
     if (cam_type!=CameraType::OMNIDIR) {
         undistort_utils::computeStereoRectifyMaps(
-            K1, K2, D1, D2,
-            R1, R2, P1, P2,
+            K1, K2, D1, D2, R1, R2, P1, P2,
             img_size, cam_type, left_maps, right_maps
         );
     }
@@ -50,8 +48,7 @@ int main(int argc, char** argv) {
         cv::Mat xi1, xi2;
         cp["xi1"] >> xi1; cp["xi2"] >> xi2;
         undistort_utils::computeStereoRectifyMaps(
-            K1, K2, D1, D2,
-            R1, R2, P1, P2,
+            K1, K2, D1, D2, R1, R2, P1, P2,
             img_size, cam_type, left_maps, right_maps,
             CV_32F, xi1, xi2
         );
@@ -81,9 +78,9 @@ int main(int argc, char** argv) {
     cv::remap(left, left, left_maps[0], left_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
     cv::remap(right, right, right_maps[0], right_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
     color = left.clone();
-    
+
     cv::hconcat(left, right, converted);
-  
+
     stereo_matcher.computeDisparity(left, right, disp);
     cv::Mat disp_fp32(disp.size(), CV_32FC1);
     for (int y=0; y<disp.size().height; y++) {
