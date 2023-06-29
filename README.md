@@ -55,9 +55,11 @@ Some configurations required for each step. See [config files](./configs/).
 **build/test**
 
 * Original
+
 ![original](./samples/test.jpg "original")
 
 * 3D preview ([Cloud Compare](https://www.danielgm.net/cc/))
+
 ![point_cloud](./samples/preview.webp "point_cloud")
 
 
@@ -77,6 +79,7 @@ Firstly, to calculate the disparity between the images captured by two cameras, 
 The required camera matrices can be acquired by photographing a specific checkerboard pattern from various angles and applying a corner detection algorithm.
 
 * Checkerboard
+
 ![checkerboard](./samples/calib_sample.jpg "checkerboard")
 
 ### Image transformation
@@ -88,9 +91,11 @@ The equirectangular transformation addresses this image area issue while preserv
 Equirectangular is a graphical method commonly used in world maps, where the axes correspond to latitude and longitude.
 
 * Right after parallel lines aligned
+
 ![rectify](./samples/rect.png "rectify")
 
 * After Equirectangular transformation
+
 ![eqrec](./samples/eqrec.png "eqrec")
 
 
@@ -99,6 +104,7 @@ Equirectangular is a graphical method commonly used in world maps, where the axe
 Disparity calculation is performed on the transformed images. A image matching algorithm can be used to calculate disparity. The matching algorithm cannot calculate disparity well for areas with little texture.
 
 * Disparity
+
 ![disparity](./samples/disp.png "diaparity")
 
 Once the disparity has been calculated, all that remains is to convert it to depth using a simple formula.
@@ -112,6 +118,7 @@ The disparities derived from stereo matching of equirectangular images differ fr
 Similarly, we map the equirectangular RGB images to their recitfied coordinates before performing calculations. After the coordinate transformation, the method of creating a 3D point cloud from a standard image can be used.
 
 * Image to Point Cloud
+
 ![cloud_compare](./samples/conversion.png)
 
 
@@ -122,6 +129,7 @@ Similarly, we map the equirectangular RGB images to their recitfied coordinates 
 The clarity near the center of rectified and equirectangular images greatly differs, significantly impacting the accuracy of stereo matching.　While high-precision stereo matching is possible with rectified images if the image is enlarged, it results in increased computational load and is inefficient compared to equirectangular images.
 
 * Rectified vs Equirectangular
+
 ![comparison disparity](./samples/rect_eqrec_disparity.png)
 
 ### Transformation Map
@@ -133,6 +141,7 @@ However, if we convert to an equirectangular image in the order of original imag
 Therefore, we combined the maps of the rectified conversion and the equirectangular conversion using cv::remap, making the transformation from the original image to an equirectangular image possible.
 
 * High-quality equirectangular image
+
 ![high-quality equirectangular](./samples/remap.png)
 
 ## Future update
