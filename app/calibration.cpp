@@ -9,7 +9,7 @@ int main (int argc, char** argv) {
     std::string conf_path = "configs/calibration.conf";
     std::string imgs_dir = "calib_images/";
     std::string save_path = "configs/camera_params.yaml";
-    std::string test_path = "images/test-1.jpg";
+    std::string test_path = "images/sample-1.jpg";
     std::map<std::string, std::string> args_map;
     args_map = config_utils::parseArguments(argc, argv);
     if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
