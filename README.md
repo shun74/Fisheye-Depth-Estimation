@@ -50,8 +50,6 @@ Some configurations required for each step. See [config files](./configs/).
 
 ## Result
 
-### Compute Disparity
-
 **build/test**
 
 * Original
