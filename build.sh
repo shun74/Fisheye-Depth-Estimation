@@ -5,5 +5,6 @@ else
 fi
 
 cd build
-cmake ..
+# cmake ..
+cmake -DENABLE_CUDA=ON ..
 make
