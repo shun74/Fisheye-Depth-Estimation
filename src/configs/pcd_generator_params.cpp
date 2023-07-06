@@ -15,10 +15,11 @@ void PointCloudGeneratorParams::loadParams(std::string path)
         return;
     }
 
-    is_fisheye = config_utils::getBool(conf_map["is_fisheye"]);
-    cv::Size_<double> x_clip = config_utils::getCvSize<double>(conf_map["x_clip"]);
-    cv::Size_<double> y_clip = config_utils::getCvSize<double>(conf_map["y_clip"]);
-    cv::Size_<double> z_clip = config_utils::getCvSize<double>(conf_map["z_clip"]);
+    cv::Size_<double> x_clip, y_clip, z_clip;
+    if (conf_map.count("is_fisheye")>0) is_fisheye = config_utils::getBool(conf_map["is_fisheye"]);
+    if (conf_map.count("x_clip")>0) x_clip = config_utils::getCvSize<double>(conf_map["x_clip"]);
+    if (conf_map.count("y_clip")>0) y_clip = config_utils::getCvSize<double>(conf_map["y_clip"]);
+    if (conf_map.count("z_clip")>0) z_clip = config_utils::getCvSize<double>(conf_map["z_clip"]);
     x_min = x_clip.width;
     x_max = x_clip.height;
     y_min = y_clip.width;
@@ -26,7 +27,8 @@ void PointCloudGeneratorParams::loadParams(std::string path)
     z_min = z_clip.width;
     z_max = z_clip.height;
 
-    std::string calib_path = config_utils::getString(conf_map["calibration_file"]);
+    std::string calib_path;
+    if (conf_map.count("calibration_file")>0) calib_path = config_utils::getString(conf_map["calibration_file"]);
     cv::FileStorage fs(calib_path, cv::FileStorage::READ);
     cv::FileNode cam_params = fs["camera_params"];
     cv::Mat K, T;
