@@ -24,6 +24,10 @@ class StereoMatcherParams
         int speckle_size, speckle_range;
         int unique_ratio, mode;
 
+        bool use_filter;
+        int filter_size, refine_iter;
+        double edge_thresh, disc_thresh, sigma_range;
+
         void loadParams(std::string path);
 };
 

@@ -14,11 +14,15 @@ namespace cuda
 class StereoMatcher
 {
     private:
-        cv::Ptr<cv::cuda::StereoSGM> stereo_matcher_;
-
         std::string algorithm_;
 
         cv::Size blur_kernel_;
+        
+        cv::Ptr<cv::cuda::StereoSGM> stereo_matcher_;
+
+        bool use_filter_;
+        cv::Ptr<cv::cuda::DisparityBilateralFilter> disp_filter_; 
+
 
     public:
         StereoMatcher(std::string path);

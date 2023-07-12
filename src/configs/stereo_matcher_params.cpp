@@ -29,6 +29,12 @@ void StereoMatcherParams::loadParams(std::string path)
     if(conf_map.count("speckle_range")>0) speckle_range = config_utils::getInt(conf_map["speckle_range"]);
     if(conf_map.count("unique_ratio")>0) unique_ratio = config_utils::getInt(conf_map["unique_ratio"]);
     if(conf_map.count("mode")>0) mode = config_utils::getInt(conf_map["mode"]);
+    if(conf_map.count("use_filter")>0) use_filter = config_utils::getBool(conf_map["use_filter"]);
+    if(conf_map.count("filter_size")>0) filter_size = config_utils::getInt(conf_map["filter_size"]);
+    if(conf_map.count("refine_iter")>0) refine_iter = config_utils::getInt(conf_map["refine_iter"]);
+    if(conf_map.count("edge_thresh")>0) edge_thresh = config_utils::getDouble(conf_map["edge_thresh"]);
+    if(conf_map.count("disc_thresh")>0) disc_thresh = config_utils::getDouble(conf_map["disc_thresh"]);
+    if(conf_map.count("sigma_range")>0) sigma_range = config_utils::getDouble(conf_map["sigma_range"]);
 }
 
 }
