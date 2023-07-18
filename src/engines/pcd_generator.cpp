@@ -109,17 +109,23 @@ namespace engine
             std::cout << "Point Cloud Generator: Set maps befor run" << std::endl;
             return;
         }
-        pcd->points.clear();
 
-        for (int py = 0; py < disp.size().height; py++)
-        {
-            for (int px = 0; px < disp.size().width; px++)
-            {
-                float d = disp.at<short>(py, px) / 16.0f;
-                pcl::PointXYZ point;
-                if (!calcPoint(px, py, d, point)) continue;
-                pcd->points.push_back(point);
+        pcd->points.clear();
+        std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> pcd_array(disp.size().height);
+        cv::parallel_for_(cv::Range(0, disp.size().height), [&](const cv::Range& range) {
+            for (int py=range.start; py<range.end; py++) {
+                pcd_array[py] = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
+                for (int px=0; px<disp.size().width; px++) {
+                    float d = disp.at<short>(py, px) / 16.0f;
+                    pcl::PointXYZRGB point;
+                    if (!calcPoint(px, py, d, point)) continue;
+                    pcd_array[py]->points.push_back(point);
+                }
             }
+        });
+
+        for (auto &_pcd: pcd_array) {
+            *pcd += *_pcd;
         }
         pcd->width = pcd->points.size();
         pcd->height = 1;
@@ -137,16 +143,22 @@ namespace engine
             return;
         pcd->points.clear();
 
-        for (int py = 0; py < disp.size().height; py++)
-        {
-            for (int px = 0; px < disp.size().width; px++)
-            {
-                float d = disp.at<short>(py, px) / 16.0f;
-                cv::Vec3b bgr = color.at<cv::Vec3b>(py, px);
-                pcl::PointXYZRGB point;
-                if (!calcColorPoint(px, py, d, bgr, point)) continue;
-                pcd->points.push_back(point);
+        std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> pcd_array(disp.size().height);
+        cv::parallel_for_(cv::Range(0, disp.size().height), [&](const cv::Range& range) {
+            for (int py=range.start; py<range.end; py++) {
+                pcd_array[py] = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>();
+                for (int px=0; px<disp.size().width; px++) {
+                    float d = disp.at<short>(py, px) / 16.0f;
+                    cv::Vec3b bgr = color.at<cv::Vec3b>(py, px);
+                    pcl::PointXYZRGB point;
+                    if (!calcColorPoint(px, py, d, bgr, point)) continue;
+                    pcd_array[py]->points.push_back(point);
+                }
             }
+        });
+
+        for (auto &_pcd: pcd_array) {
+            *pcd += *_pcd;
         }
         pcd->width = pcd->points.size();
         pcd->height = 1;
