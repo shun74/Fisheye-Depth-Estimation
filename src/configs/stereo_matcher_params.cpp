@@ -30,11 +30,13 @@ void StereoMatcherParams::loadParams(std::string path)
     if(conf_map.count("unique_ratio")>0) unique_ratio = config_utils::getInt(conf_map["unique_ratio"]);
     if(conf_map.count("mode")>0) mode = config_utils::getInt(conf_map["mode"]);
     if(conf_map.count("use_filter")>0) use_filter = config_utils::getBool(conf_map["use_filter"]);
-    if(conf_map.count("filter_size")>0) filter_size = config_utils::getInt(conf_map["filter_size"]);
-    if(conf_map.count("refine_iter")>0) refine_iter = config_utils::getInt(conf_map["refine_iter"]);
-    if(conf_map.count("edge_thresh")>0) edge_thresh = config_utils::getDouble(conf_map["edge_thresh"]);
-    if(conf_map.count("disc_thresh")>0) disc_thresh = config_utils::getDouble(conf_map["disc_thresh"]);
-    if(conf_map.count("sigma_range")>0) sigma_range = config_utils::getDouble(conf_map["sigma_range"]);
+    if(conf_map.count("wsl_lambda")>0) wsl_lambda = config_utils::getDouble(conf_map["wsl_lambda"]);
+    if(conf_map.count("wsl_sigma")>0) wsl_sigma = config_utils::getDouble(conf_map["wsl_sigma"]);
+    if(conf_map.count("dbf_filter_size")>0) dbf_filter_size = config_utils::getInt(conf_map["dbf_filter_size"]);
+    if(conf_map.count("dbf_refine_iter")>0) dbf_refine_iter = config_utils::getInt(conf_map["dbf_refine_iter"]);
+    if(conf_map.count("dbf_edge_thresh")>0) dbf_edge_thresh = config_utils::getDouble(conf_map["dbf_edge_thresh"]);
+    if(conf_map.count("dbf_disc_thresh")>0) dbf_disc_thresh = config_utils::getDouble(conf_map["dbf_disc_thresh"]);
+    if(conf_map.count("dbf_sigma_range")>0) dbf_sigma_range = config_utils::getDouble(conf_map["dbf_sigma_range"]);
 }
 
-}
+} // naemspace config

@@ -1,8 +1,11 @@
-#include <engines/pcd_generator.h>
+#include <engines/cuda/pcd_generator_cuda.h>
 
 namespace engine
 {
-    
+
+namespace cuda
+{
+
 PointCloudGenerator::PointCloudGenerator(std::string path)
 {
     config::PointCloudGeneratorParams pcd_params(path);
@@ -175,5 +178,7 @@ void PointCloudGenerator::computePointCloud(const cv::Mat &color, const cv::Mat 
 
     downSamplePoints<pcl::PointXYZRGB>(pcd);
 }
+
+} // namespace cuda
 
 } // namespace engine

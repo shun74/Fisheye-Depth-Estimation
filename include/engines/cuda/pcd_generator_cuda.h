@@ -1,13 +1,16 @@
 #pragma once
 
 #include <iostream>
+#include "cuda_runtime.h"
 #include <opencv2/opencv.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include <pcl/filters/voxel_grid.h>
 #include <configs/pcd_generator_params.h>
 
 namespace engine
+{
+
+namespace cuda
 {
 
 class PointCloudGenerator
@@ -57,5 +60,7 @@ class PointCloudGenerator
     
     void computePointCloud(const cv::Mat &color, const cv::Mat &disp, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &pcd);
 };
+
+}
 
 }

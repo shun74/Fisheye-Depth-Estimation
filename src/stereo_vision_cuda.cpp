@@ -90,8 +90,6 @@ void StereoVisionProcessor::computeDisparity()
     cv::Mat left, right, disp, left_cp;
     while (!stop_disp_)
     {
-        auto start = std::chrono::high_resolution_clock::now();
-
         {
             std::shared_lock<std::shared_mutex> lock(mtx_img_);
             left_.copyTo(left);
@@ -107,9 +105,6 @@ void StereoVisionProcessor::computeDisparity()
             disp.copyTo(disp_);
             left_cp.copyTo(rgb_);
         }
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-        std::cout << "Disp: " << elapsed.count() << "ms." << std::endl;
     }
     up_disp_ = false;
     stop_disp_ = false;
@@ -123,7 +118,6 @@ void StereoVisionProcessor::computePointCloud()
 
     while (!stop_pcd_)
     {
-        auto start = std::chrono::high_resolution_clock::now();
         {
             std::shared_lock<std::shared_mutex> lock(mtx_disp_);
             disp_.copyTo(disp);
@@ -138,9 +132,6 @@ void StereoVisionProcessor::computePointCloud()
             std::lock_guard<std::shared_mutex> lock(mtx_pcd_);
             pcl::copyPointCloud(*pcd, pcd_);
         }
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-        std::cout << "PCD: " << elapsed.count() << "ms." << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(img_update_sleep_));
     }
     up_pcd_ = false;
@@ -213,7 +204,6 @@ void StereoVisionProcessor::updatePcdViewer()
 
     while (!stop_pcd_viewer_)
     {
-        auto start = std::chrono::high_resolution_clock::now();
         {
             std::shared_lock<std::shared_mutex> lock(mtx_pcd_);
             if (pcd_.empty())
@@ -226,9 +216,6 @@ void StereoVisionProcessor::updatePcdViewer()
         }
         viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, points_size_, "pcd");
         viewer.spinOnce(viewer_update_sleep_);
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-        std::cout << "PCD viewer: " << elapsed.count() << "ms." << std::endl;
     }
     up_pcd_viewer_ = false;
     stop_pcd_viewer_ = false;
@@ -328,4 +315,4 @@ bool StereoVisionProcessor::stopThreads()
     return true;
 }
 
-}
+} // namespace cdua

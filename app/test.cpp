@@ -57,8 +57,8 @@ int main(int argc, char** argv) {
     engine::StereoMatcher stereo_matcher(conf_path);
     engine::PointCloudGenerator pcd_generator(conf_path);
 
+    cv::Mat map_x, map_y;
     if (cam_type==CameraType::FISHEYE) {
-        cv::Mat map_x, map_y;
         undistort_utils::computeEquirectangleMaps(P1, img_size, map_x, map_y);
         pcd_generator.setConvertMaps(map_x, map_y);
     }
@@ -88,7 +88,6 @@ int main(int argc, char** argv) {
             disp_fp32.at<float>(y,x) = static_cast<float>(disp.at<short>(y,x))/16.0f;
         }
     }
-
     cv::normalize(disp, disp_norm, 0, 255, cv::NORM_MINMAX, CV_8U);
     cv::imshow("original", img);
     cv::imshow("converted", converted);

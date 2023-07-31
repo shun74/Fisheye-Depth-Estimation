@@ -8,26 +8,26 @@ namespace config
 
 class StereoVisionParams
 {
-    public:
-        StereoVisionParams(std::string path) {
-            loadParams(path);
-        }
+  public:
+    StereoVisionParams(std::string path) {
+        loadParams(path);
+    }
 
-        cv::Size_<int> img_size;
-        cv::Size_<int> win_size;
+    cv::Size_<int> img_size;
+    cv::Size_<int> win_size;
 
-        int img_update_sleep;
-        int viewer_update_sleep;
+    int img_update_sleep;
+    int viewer_update_sleep;
 
-        bool source_viewer;
-        bool rectified_viewer;
-        bool disparity_viewer;
-        bool point_cloud_viewer;
+    bool source_viewer;
+    bool rectified_viewer;
+    bool disparity_viewer;
+    bool point_cloud_viewer;
 
-        int points_size;
-        double coordinate_system;
+    int points_size;
+    double coordinate_system;
 
-        void loadParams(std::string path);
+    void loadParams(std::string path);
 };
 
 }

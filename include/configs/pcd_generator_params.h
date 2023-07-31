@@ -8,20 +8,23 @@ namespace config
 
 class PointCloudGeneratorParams
 {
-    public:
-        PointCloudGeneratorParams(std::string path) {
-            loadParams(path);
-        }
+  public:
+    PointCloudGeneratorParams(std::string path) {
+        loadParams(path);
+    }
 
-        bool is_fisheye;
-        
-        double x_min, x_max;
-        double y_min, y_max;
-        double z_min, z_max;
+    bool is_fisheye;
+    
+    double x_min, x_max;
+    double y_min, y_max;
+    double z_min, z_max;
 
-        double fx, fy, cx, cy, base;
+    double fx, fy, cx, cy, base;
 
-        void loadParams(std::string path);
+    bool use_down_sample;
+    double leaf_x, leaf_y, leaf_z;
+
+    void loadParams(std::string path);
 };
 
 

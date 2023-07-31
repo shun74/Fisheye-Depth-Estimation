@@ -6,20 +6,22 @@
 
 namespace config
 {
-    class CalibrationModelParams
-    {
-        public:
-            CalibrationModelParams(std::string path) {
-                loadParams(path);
-            }
 
-            CameraType cam_type;
+class CalibrationModelParams
+{
+  public:
+    CalibrationModelParams(std::string path) {
+        loadParams(path);
+    }
 
-            cv::Size_<int> img_size;
-            cv::Size_<int> board_size;
-            double square_size;
-            double fov;
+    CameraType cam_type;
 
-            void loadParams(std::string path);
-    };
+    cv::Size_<int> img_size;
+    cv::Size_<int> board_size;
+    double square_size;
+    double fov;
+
+    void loadParams(std::string path);
+};
+
 }

@@ -211,8 +211,8 @@ void StereoVisionProcessor::updatePcdViewer()
             viewer.addPointCloud(pcd, "pcd");
         }
         viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, points_size_, "pcd");
-        viewer.spinOnce(100);
-        std::this_thread::sleep_for(std::chrono::milliseconds(viewer_update_sleep_));
+        viewer.spinOnce(viewer_update_sleep_);
+        std::this_thread::sleep_for(std::chrono::milliseconds(img_update_sleep_));
     }
     up_pcd_viewer_ = false;
     stop_pcd_viewer_ = false;
