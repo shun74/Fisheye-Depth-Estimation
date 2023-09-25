@@ -1,6 +1,5 @@
 #include <chrono>
 #include <stereo_vision_cuda.h>
-#include <chrono>
 
 namespace cuda
 {
