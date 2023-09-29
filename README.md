@@ -20,7 +20,7 @@ OpenCV should be compiled with [OpenEXR](https://openexr.com/en/latest/).
 ### Build
 
 ```bash
-sh build.sh
+sh scripts/build.sh
 ```
 
 ### Calibration
@@ -28,7 +28,7 @@ sh build.sh
 To remove camera distortion and stereo recitfication, calibrate camera with checker board.
 
 ```bash
-build/calibration --config=<config file path> --images_dir==<calib images dir> --output=<calib data output path> --test_image=<test image path>
+sh scripts/calib.sh
 ```
 
 ### Test 3D reconstruction
@@ -36,13 +36,13 @@ build/calibration --config=<config file path> --images_dir==<calib images dir> -
 Before proceeding with real-time 3D reconstruction, verify the calibration results and parameters by testing a single-shot image.
 
 ```bash
-build/test --config=<config file path> --calib=<calib data file path> --test_image=<test image path> --output_disp=<disparity image output path> --output_pcd=<point cloud output path>
+sh scripts/reconstruct.sh
 ```
 
 ### Real-time stereo
 
 ```bash
-build/realtime_stereo --config=<config file path> --calib=<calib data file path>
+sh scripts/realtime.sh
 ```
 
 Some configurations required for each step. See [config files](./configs/).
