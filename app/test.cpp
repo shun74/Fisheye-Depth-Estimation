@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     // load config file
     std::string conf_path = "configs/test.conf";
     std::string calib_path = "configs/camera_params.yaml";
-    std::string img_path = "images/sample-1.jpg";
+    std::string img_path = "images/test-1.jpg";
     std::string save_disp_path = "output/test_disp.exr"; // OpenEXR recommanded
     std::string save_pcd_path = "output/test_3d.pcd";
     std::map<std::string, std::string> args_map;
