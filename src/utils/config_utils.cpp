@@ -31,13 +31,13 @@ CameraType getCameraType(std::string s)
   s.erase(std::remove(s.begin(), s.end(), '\"'), s.end());
   CameraType type;
   if (s == "pinhole")
-      type = CameraType::PINHOLE;
+    type = CameraType::PINHOLE;
   else if (s == "fisheye")
-      type = CameraType::FISHEYE;
+    type = CameraType::FISHEYE;
   else if (s == "omnidir")
-      type = CameraType::OMNIDIR;
+    type = CameraType::OMNIDIR;
   else
-      throw std::runtime_error("CarlibrationModel: Invalid CameraType detected.");
+    throw std::runtime_error("CarlibrationModel: Invalid CameraType detected.");
   return type;
 }
 
@@ -96,34 +96,34 @@ std::map<std::string, std::string> parseArguments(int argc, char **argv)
   {
     std::string arg = argv[i];
 
-    auto pos = arg.find('=');
-    // pattern: --image=./path
-    if (pos != std::string::npos)
+    if (arg.substr(0, 2) == "--")
     {
-      std::string key = arg.substr(0, pos);
-      std::string value = arg.substr(pos + 1);
-
-      if (key[0] == '-')
+      size_t pos = arg.find('=');
+      if (pos != std::string::npos) 
       {
-        key = key.substr(key[1] == '-' ? 2 : 1);
-      }
-      arg_map[key] = value;
-    }
-    // pattern: --image ./path
-    else if (i + 1 < argc)
-    {
-      std::string key = arg;
-      std::string value = argv[++i];
+        std::string key = arg.substr(2, pos - 2);
+        std::string value = arg.substr(pos + 1);
 
-      if (key[0] == '-')
-      {
-        key = key.substr(key[1] == '-' ? 2 : 1);
+        arg_map[key] = value;
       }
-      arg_map[key] = value;
-    }
-    else
-    {
-      throw std::invalid_argument("Unknown arg: " + arg);
+      else if (i + 1 < argc)
+      {
+        if (std::string(argv[i+1]).find("=") != std::string::npos) {
+          ++i;
+          if (i + 1 >= argc) {
+            throw std::invalid_argument("Invalid arg: " + arg);
+          }
+        }
+          
+        std::string key = arg.substr(2);
+        std::string value = argv[++i];
+
+        arg_map[key] = value;
+      }
+      else 
+      {
+        throw std::invalid_argument("Invalid arg: " + arg);
+      }
     }
   }
   return arg_map;
