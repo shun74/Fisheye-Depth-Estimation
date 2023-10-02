@@ -34,4 +34,4 @@ class StereoMatcher
     void computeDisparity(cv::Mat &left, cv::Mat &right, cv::Mat &disp);
 };
 
-}
+} // naemspace engine

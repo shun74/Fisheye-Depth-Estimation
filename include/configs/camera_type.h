@@ -2,7 +2,7 @@
 
 enum class CameraType
 {
-    PINHOLE = 0,
-    FISHEYE = 1,
-    OMNIDIR = 2
+  PINHOLE = 0,
+  FISHEYE = 1,
+  OMNIDIR = 2
 };

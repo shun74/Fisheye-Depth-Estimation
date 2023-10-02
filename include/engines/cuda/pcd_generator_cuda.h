@@ -10,7 +10,6 @@
 
 namespace engine
 {
-
 namespace cuda
 {
 
@@ -62,6 +61,5 @@ class PointCloudGenerator
     void computePointCloud(const cv::Mat &color, const cv::Mat &disp, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &pcd);
 };
 
-}
-
-}
+} // namespace cuda
+} // namespace engine

@@ -24,4 +24,4 @@ class CalibrationModelParams
     void loadParams(std::string path);
 };
 
-}
+} // namespace config

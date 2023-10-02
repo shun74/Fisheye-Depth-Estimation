@@ -76,4 +76,4 @@ class StereoVisionProcessor
     bool run(int video_cap=0);
 };
 
-}
+} // namespace cuda

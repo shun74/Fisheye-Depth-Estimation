@@ -27,5 +27,4 @@ class PointCloudGeneratorParams
     void loadParams(std::string path);
 };
 
-
-}
+} // namespace config

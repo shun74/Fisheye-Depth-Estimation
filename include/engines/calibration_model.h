@@ -31,24 +31,24 @@ class CalibrationModel
     cv::Mat xi1_, xi2_;
 
     void scanCheckerBoard(
-        std::vector<cv::Mat> &left_imgs, std::vector<cv::Mat> &right_imgs,
-        std::vector<std::vector<cv::Point2f>> &left_corners,
-        std::vector<std::vector<cv::Point2f>> &right_corners);
+      std::vector<cv::Mat> &left_imgs, std::vector<cv::Mat> &right_imgs,
+      std::vector<std::vector<cv::Point2f>> &left_corners,
+      std::vector<std::vector<cv::Point2f>> &right_corners);
 
     void getObjPoints(int num, std::vector<std::vector<cv::Point3f>> &obj_points);
 
     void calibratePinhole(
-        std::vector<std::vector<cv::Point2f>> left_points,
-        std::vector<std::vector<cv::Point2f>> right_points,
-        std::vector<std::vector<cv::Point3f>> obj_points);
+      std::vector<std::vector<cv::Point2f>> left_points,
+      std::vector<std::vector<cv::Point2f>> right_points,
+      std::vector<std::vector<cv::Point3f>> obj_points);
     void calibrateFisheye(
-        std::vector<std::vector<cv::Point2f>> left_points,
-        std::vector<std::vector<cv::Point2f>> right_points,
-        std::vector<std::vector<cv::Point3f>> obj_points);
+      std::vector<std::vector<cv::Point2f>> left_points,
+      std::vector<std::vector<cv::Point2f>> right_points,
+      std::vector<std::vector<cv::Point3f>> obj_points);
     void calibrateOmnidir(
-        std::vector<std::vector<cv::Point2f>> left_points,
-        std::vector<std::vector<cv::Point2f>> right_points,
-        std::vector<std::vector<cv::Point3f>> obj_points);
+      std::vector<std::vector<cv::Point2f>> left_points,
+      std::vector<std::vector<cv::Point2f>> right_points,
+      std::vector<std::vector<cv::Point3f>> obj_points);
 
   public:
     CalibrationModel(std::string path);
@@ -61,4 +61,4 @@ class CalibrationModel
     void writeCameraParams(std::string path);
 };
 
-}
+} // namespace engine

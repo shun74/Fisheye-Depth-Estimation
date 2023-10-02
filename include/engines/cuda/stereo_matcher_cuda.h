@@ -7,7 +7,6 @@
 
 namespace engine
 {
-
 namespace cuda
 {
 
@@ -33,6 +32,5 @@ class StereoMatcher
     void computeDisparity(cv::Mat &left, cv::Mat &right, cv::Mat &disp);
 };
 
-}
-
-}
+} // namespace cuda
+} // naemspace engine

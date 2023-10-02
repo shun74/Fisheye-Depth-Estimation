@@ -30,4 +30,4 @@ class StereoVisionParams
     void loadParams(std::string path);
 };
 
-}
+} // namespace config
