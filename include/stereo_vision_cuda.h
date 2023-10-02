@@ -3,6 +3,8 @@
 #include <iostream>
 #include <shared_mutex>
 #include <thread>
+#include <atomic>
+#include <future>
 #include <opencv2/opencv.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -19,16 +21,34 @@ namespace cuda
 class StereoVisionProcessor
 {
   private:
-    // data to share among threads 
-    std::shared_mutex mtx_img_, mtx_disp_, mtx_pcd_;
-    cv::Mat img_, left_, right_, disp_, rgb_;
-    pcl::PointCloud<pcl::PointXYZRGB> pcd_;
+    // Image update thread
+    std::shared_mutex mtx_img_;
+    cv::Mat img_, left_, right_;
+    std::atomic<bool> stop_img_update_thread_;
+    std::atomic<bool> is_video_cap_open_;
+    std::future<void> fut_img_update_thread_;
 
-    // thread & stop flag
-    std::thread th_img_update_, th_disp_, th_pcd_, th_viewer_, th_pcd_viewer_;
-    bool stop_img_update_, stop_disp_, stop_pcd_, stop_viewer_, stop_pcd_viewer_;
-    bool up_img_update_, up_disp_, up_pcd_, up_viewer_, up_pcd_viewer_;
-    bool video_cap_;
+    // Compute disparity thread
+    std::shared_mutex mtx_disp_;
+    cv::Mat disp_;
+    std::atomic<bool> stop_disp_thread_;
+    std::future<void> fut_disp_thread_;
+
+    // Compute point cloud thread
+    std::shared_mutex mtx_pcd_;
+    cv::Mat rgb_;
+    pcl::PointCloud<pcl::PointXYZRGB> pcd_;
+    std::atomic<bool> stop_pcd_thread_;
+    std::future<void> fut_pcd_thread_;
+
+    // Images Viewer thread
+    std::atomic<bool> stop_viewer_thread_;
+    std::future<void> fut_viewer_thread_;
+
+    // PCD Viewer thread
+    std::atomic<bool> stop_pcd_viewer_thread_;
+    std::future<void> fut_pcd_viewer_thread_;
+
     
     // basic params
     std::vector<cv::Mat> left_maps_, right_maps_;
@@ -63,7 +83,7 @@ class StereoVisionProcessor
     bool stopThreads();
 
   public:
-    StereoVisionProcessor(std::string path, std::vector<cv::Mat> left_maps, std::vector<cv::Mat> right_maps);
+    StereoVisionProcessor(std::string config_path, std::vector<cv::Mat> left_maps, std::vector<cv::Mat> right_maps);
 
     ~StereoVisionProcessor() {
         stopThreads();
