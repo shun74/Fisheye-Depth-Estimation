@@ -36,17 +36,17 @@ StereoVisionProcessor::StereoVisionProcessor(std::string config_path, std::vecto
 
 void StereoVisionProcessor::setParams(config::StereoVisionParams sv_params)
 {
-  img_size_ = sv_params.img_size;
-  win_size_ = sv_params.win_size;
-  img_update_sleep_ = sv_params.img_update_sleep;
-  viewer_update_sleep_ = sv_params.viewer_update_sleep;
-  source_viewer_ = sv_params.source_viewer;
-  rectified_viewer_ = sv_params.rectified_viewer;
-  disparity_viewer_ = sv_params.disparity_viewer;
-  point_cloud_viewer_ = sv_params.point_cloud_viewer;
+  img_size_             = sv_params.img_size;
+  win_size_             = sv_params.win_size;
+  img_update_sleep_     = sv_params.img_update_sleep;
+  viewer_update_sleep_  = sv_params.viewer_update_sleep;
+  source_viewer_        = sv_params.source_viewer;
+  rectified_viewer_     = sv_params.rectified_viewer;
+  disparity_viewer_     = sv_params.disparity_viewer;
+  point_cloud_viewer_   = sv_params.point_cloud_viewer;
   if (point_cloud_viewer_)
   {
-    points_size_ = sv_params.points_size;
+    points_size_       = sv_params.points_size;
     coordinate_system_ = sv_params.coordinate_system;
   }
 }
@@ -275,25 +275,16 @@ bool StereoVisionProcessor::run(int video_cap)
 
 bool StereoVisionProcessor::stopThreads()
 {
-  if (!stop_img_update_thread_.load() && 
-      fut_img_update_thread_.wait_for(0ms)  == std::future_status::timeout)
-    stop_img_update_thread_.store(true);
-  
-  if (!stop_disp_thread_.load() &&
-      fut_disp_thread_.wait_for(0ms)        == std::future_status::timeout)
-    stop_disp_thread_.store(true);
-  
-  if (!stop_pcd_thread_.load() &&
-       fut_pcd_thread_.wait_for(0ms)        == std::future_status::timeout)
-    stop_pcd_thread_.store(true);
-  
-  if (!stop_viewer_thread_.load() &&
-      fut_viewer_thread_.wait_for(0ms)      == std::future_status::timeout)
-    stop_viewer_thread_.store(true);
-  
-  if (!stop_pcd_viewer_thread_.load() &&
-      fut_pcd_viewer_thread_.wait_for(0ms)  == std::future_status::timeout)
-    stop_pcd_viewer_thread_.store(true);
+  #define CHECK_THREAD_AND_STOP(thread_name) \
+    if (!stop_##thread_name##_thread_.load() && \
+        fut_##thread_name##_thread_.wait_for(0ms) == std::future_status::timeout) \
+      stop_##thread_name##_thread_.store(true)
+
+  CHECK_THREAD_AND_STOP(img_update);
+  CHECK_THREAD_AND_STOP(disp);
+  CHECK_THREAD_AND_STOP(pcd);
+  CHECK_THREAD_AND_STOP(viewer);
+  CHECK_THREAD_AND_STOP(pcd_viewer);
 
   std::chrono::milliseconds timeout(5000);
   auto start = std::chrono::high_resolution_clock::now();

@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <shared_mutex>
-#include <thread>
 #include <atomic>
 #include <future>
 #include <opencv2/opencv.hpp>
