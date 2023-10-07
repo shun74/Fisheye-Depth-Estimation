@@ -46,8 +46,8 @@ void StereoVisionProcessor::setParams(config::StereoVisionParams sv_params)
   point_cloud_viewer_ = sv_params.point_cloud_viewer;
   if (point_cloud_viewer_)
   {
-  points_size_ = sv_params.points_size;
-  coordinate_system_ = sv_params.coordinate_system;
+    points_size_ = sv_params.points_size;
+    coordinate_system_ = sv_params.coordinate_system;
   }
 }
 
