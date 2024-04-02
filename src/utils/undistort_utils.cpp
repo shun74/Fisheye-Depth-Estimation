@@ -36,6 +36,7 @@ void computeStereoRectifyMaps(
   }
 }
 
+// fisheye image -> (rectified image) -> equirectangular image
 void computeFisheyeMap(
   cv::Mat K, cv::Mat D, cv::Mat R, cv::Mat P,
   cv::Size img_size, int dtype, 
@@ -56,6 +57,7 @@ void computeFisheyeMap(
           rect_to_eqrec_map_y, cv::INTER_LINEAR, cv::BORDER_CONSTANT);
 }
 
+// rectified image -> equirectangular image
 void computeEquirectangleMaps(
   cv::Mat K, cv::Size img_size,
   cv::Mat &eqrec_map_x,

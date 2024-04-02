@@ -10,18 +10,20 @@
 int main(int argc, char** argv) {
 
   // load config file
-  std::string conf_path = "configs/test.conf";
-  std::string calib_path = "configs/camera_params.yaml";
-  std::string img_path = "images/test-1.jpg";
-  std::string save_disp_path = "output/test_disp.exr"; // OpenEXR recommanded
-  std::string save_pcd_path = "output/test_3d.pcd";
-  std::map<std::string, std::string> args_map;
-  args_map = config_utils::parseArguments(argc, argv);
-  if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
-  if (args_map.find("calib")!=args_map.end()) calib_path = args_map["calib"];
-  if (args_map.find("test_image")!=args_map.end()) img_path = args_map["test_image"];
-  if (args_map.find("output_disp")!=args_map.end()) save_disp_path = args_map["output_disp"];
-  if (args_map.find("output_pcd")!=args_map.end()) save_pcd_path = args_map["output_pcd"];
+  std::string command_line_keys =
+    "@config | configs/test.conf | path to the config file | "
+    "@calib | configs/camera_params.yaml | path to the camera parameters file | "
+    "@test_image | images/test-1.jpg | path to the test image | "
+    "@output_disp | output/test_disp.exr | path to save the disparity map | "
+    "@output_pcd | output/test_3d.pcd | path to save the point cloud | ";
+  cv::CommandLineParser parser(argc, argv, command_line_keys);
+
+  std::string conf_path = parser.get<std::string>("@config");
+  std::string calib_path = parser.get<std::string>("@calib");
+  std::string img_path = parser.get<std::string>("@test_image");
+  std::string save_disp_path = parser.get<std::string>("@output_disp");
+  std::string save_pcd_path = parser.get<std::string>("@output_pcd");
+
 
   // prepare for test
   cv::FileStorage fs(calib_path, cv::FileStorage::READ);
@@ -78,7 +80,6 @@ int main(int argc, char** argv) {
   cv::remap(left, left, left_maps[0], left_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
   cv::remap(right, right, right_maps[0], right_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
   color = left.clone();
-
   cv::hconcat(left, right, converted);
 
   stereo_matcher.computeDisparity(left, right, disp);

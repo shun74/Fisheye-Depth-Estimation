@@ -16,12 +16,12 @@ int main(int argc, char** argv) {
   std::signal(SIGINT, handle_signal);
 
   // load config file
-  std::string conf_path = "configs/realtime_stereo.conf";
-  std::string calib_path = "configs/camera_params.yaml";
-  std::map<std::string, std::string> args_map;
-  args_map = config_utils::parseArguments(argc, argv);
-  if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
-  if (args_map.find("calib")!=args_map.end()) calib_path = args_map["calib"];
+  std::string command_line_keys =
+    "{@config | configs/realtime_stereo.conf | path to the config file |}"
+    "{@calib | configs/camera_params.yaml | path to the camera parameters file |}";
+  cv::CommandLineParser parser(argc, argv, command_line_keys);
+  std::string conf_path = parser.get<std::string>("@config");
+  std::string calib_path = parser.get<std::string>("@calib");
 
   // load camera parameters file
   cv::FileStorage fs(calib_path, cv::FileStorage::READ);

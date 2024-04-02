@@ -6,16 +6,16 @@
 int main (int argc, char** argv) {
 
   // load config file
-  std::string conf_path = "configs/calibration.conf";
-  std::string imgs_dir = "calib_images/";
-  std::string save_path = "configs/camera_params.yaml";
-  std::string test_path = "images/test-1.jpg";
-  std::map<std::string, std::string> args_map;
-  args_map = config_utils::parseArguments(argc, argv);
-  if (args_map.find("config")!=args_map.end()) conf_path = args_map["config"];
-  if (args_map.find("images_dir")!=args_map.end()) imgs_dir = args_map["images_dir"];
-  if (args_map.find("output")!=args_map.end()) save_path = args_map["output"];
-  if (args_map.find("test_image")!=args_map.end()) test_path = args_map["test_image"];
+  std::string command_line_keys = 
+    "{@config | configs/calibration.conf | path to the config file |}"
+    "{@images_dir | calib_images/ | path to the calibration images directory |}"
+    "{@output | configs/camera_params.yaml | path to save the camera parameters |}"
+    "{@test_image | images/test-1.jpg | path to the test image |}";
+  cv::CommandLineParser parser(argc, argv, command_line_keys);
+  std::string conf_path = parser.get<std::string>("@config");
+  std::string imgs_dir = parser.get<std::string>("@images_dir");
+  std::string save_path = parser.get<std::string>("@output");
+  std::string test_path = parser.get<std::string>("@test_image");
 
   engine::CalibrationModel calib_model = engine::CalibrationModel(conf_path);
 

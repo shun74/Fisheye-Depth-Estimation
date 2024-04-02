@@ -88,45 +88,4 @@ bool parseConfigFile(std::string path, std::map<std::string, std::string> &conf_
   return true;
 }
 
-std::map<std::string, std::string> parseArguments(int argc, char **argv)
-{
-  std::map<std::string, std::string> arg_map;
-
-  for (int i = 1; i < argc; ++i)
-  {
-    std::string arg = argv[i];
-
-    if (arg.substr(0, 2) == "--")
-    {
-      size_t pos = arg.find('=');
-      if (pos != std::string::npos) 
-      {
-        std::string key = arg.substr(2, pos - 2);
-        std::string value = arg.substr(pos + 1);
-
-        arg_map[key] = value;
-      }
-      else if (i + 1 < argc)
-      {
-        if (std::string(argv[i+1]).find("=") != std::string::npos) {
-          ++i;
-          if (i + 1 >= argc) {
-            throw std::invalid_argument("Invalid arg: " + arg);
-          }
-        }
-          
-        std::string key = arg.substr(2);
-        std::string value = argv[++i];
-
-        arg_map[key] = value;
-      }
-      else 
-      {
-        throw std::invalid_argument("Invalid arg: " + arg);
-      }
-    }
-  }
-  return arg_map;
-}
-
 } // namespace config_utils
