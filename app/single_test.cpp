@@ -1,103 +1,29 @@
-#include <csignal>
 #include <iostream>
-#include <memory>
 
 #include <yaml-cpp/yaml.h>
-
-#include <opencv2/opencv.hpp>
 
 #include <stereo_vision.h>
 #include <undistort.h>
 
-#include "pcd_visualizer.h"
-
 #define WINDOW_W 1280
 #define WINDOW_H 960
 
-bool exit_flag = false;
-
-void handle_signal(int signal)
-{
-    std::cout << "\n" << "Caught signal " << signal << std::endl;
-    exit_flag = true;
-}
-
-void run(StereoVisionProcessor *sv_processor, const std::vector<cv::Mat> &left_maps,
-         const std::vector<cv::Mat> &right_maps, const cv::Size &img_size)
-{
-    int w = img_size.width;
-    int h = img_size.height;
-
-    cv::VideoCapture cap(0);
-    if (!cap.isOpened())
-    {
-        std::cerr << "Failed to open video capture." << std::endl;
-        return;
-    }
-    cap.set(cv::CAP_PROP_BUFFERSIZE, 0);
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, w * 2);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, h);
-
-    cv::namedWindow("input", cv::WINDOW_NORMAL);
-    cv::resizeWindow("input", WINDOW_W, WINDOW_H);
-    cv::namedWindow("eqrec", cv::WINDOW_NORMAL);
-    cv::resizeWindow("eqrec", WINDOW_W, WINDOW_H);
-    cv::namedWindow("disparity", cv::WINDOW_NORMAL);
-    cv::resizeWindow("disparity", WINDOW_W, WINDOW_H);
-
-    const int max_points = w * h;
-
-    PointCloudVisualizer visualizer(WINDOW_W, WINDOW_H, max_points);
-    visualizer.setPointSize(4);
-
-    // visualizer.setDownsamplingFactor(2); // reduce point to half
-
-    visualizer.start();
-
-    cv::Mat img, eqrec_left, eqrec_right, eqrec, raw_disp, norm_disp;
-    cv::Mat point_cloud(1, w * h, CV_32FC3);
-    cv::Mat colors(1, w * h, CV_8UC3);
-    std::vector<bool> valid;
-
-    while (!exit_flag)
-    {
-        if (cv::waitKey(1) >= 0)
-            exit_flag = true;
-
-        cap >> img;
-        if (img.empty())
-            continue;
-
-        cv::remap(img(cv::Rect(0, 0, w, h)), eqrec_left, left_maps[0], left_maps[1], cv::INTER_LINEAR,
-                  cv::BORDER_CONSTANT);
-        cv::remap(img(cv::Rect(w, 0, w, h)), eqrec_right, right_maps[0], right_maps[1], cv::INTER_LINEAR,
-                  cv::BORDER_CONSTANT);
-        sv_processor->computePointCloud(eqrec_left, eqrec_right, raw_disp, point_cloud, colors, valid);
-
-        visualizer.updatePointCloud(point_cloud, colors, valid);
-
-        cv::imshow("input", img);
-        cv::hconcat(eqrec_left, eqrec_right, eqrec);
-        cv::imshow("eqrec", eqrec);
-        cv::normalize(raw_disp, norm_disp, 0, 255, cv::NORM_MINMAX, CV_8U);
-        cv::imshow("disparity", norm_disp);
-    }
-
-    visualizer.stop();
-    cv::destroyAllWindows();
-}
-
 int main(int argc, char **argv)
 {
-    // monitor the signales to stop
-    std::signal(SIGINT, handle_signal);
 
     // load config file
-    std::string command_line_keys = "{config | configs/realtime_stereo.yaml | path to the config file |}"
-                                    "{calib | configs/camera_params.yaml | path to the camera parameters file |}";
+    std::string command_line_keys = "{config | configs/single_test.yaml | path to the config file}"
+                                    "{calib | configs/camera_params.yaml | path to the camera parameters file}"
+                                    "{test_image | images/test-1.jpg | path to the test image}"
+                                    "{output_disp | output/test_disp.exr | path to save the disparity map}"
+                                    "{output_pcd | output/test_3d.pcd | path to save the point cloud}";
     cv::CommandLineParser parser(argc, argv, command_line_keys);
+
     std::string conf_path = parser.get<std::string>("config");
     std::string calib_path = parser.get<std::string>("calib");
+    std::string img_path = parser.get<std::string>("test_image");
+    std::string save_disp_path = parser.get<std::string>("output_disp");
+    std::string save_pcd_path = parser.get<std::string>("output_pcd");
 
     // Load config yaml file
     YAML::Node config = YAML::LoadFile(conf_path);
@@ -153,7 +79,46 @@ int main(int argc, char **argv)
         speckle_size, speckle_range, mode, fx, fy, cx, cy, base_line, map_x, map_y);
     sv_processor->setPostFilter(wsl_lambda, wsl_sigma);
 
-    run(sv_processor.get(), left_maps, right_maps, img_size);
+    // Test
+    cv::Mat img, left, right, converted, disp, disp_norm, color;
+    img = cv::imread(img_path);
+
+    left = img(cv::Rect(0, 0, img.cols / 2, img.rows)).clone();
+    right = img(cv::Rect(img.cols / 2, 0, img.cols / 2, img.rows)).clone();
+    cv::remap(left, left, left_maps[0], left_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
+    cv::remap(right, right, right_maps[0], right_maps[1], cv::INTER_LINEAR, cv::BORDER_CONSTANT);
+    color = left.clone();
+    cv::hconcat(left, right, converted);
+
+    int w = left.size().width;
+    int h = left.size().height;
+    cv::Mat pcd(1, w * h, CV_32FC3);
+    cv::Mat colors(1, w * h, CV_8UC3);
+    std::vector<bool> valid;
+
+    sv_processor->computePointCloud(left, right, disp, pcd, colors, valid);
+
+    cv::namedWindow("original", cv::WINDOW_NORMAL);
+    cv::resizeWindow("original", WINDOW_W, WINDOW_H);
+    cv::imshow("original", img);
+
+    cv::namedWindow("converted", cv::WINDOW_NORMAL);
+    cv::resizeWindow("converted", WINDOW_W, WINDOW_H);
+    cv::imshow("converted", converted);
+
+    cv::normalize(disp, disp_norm, 0, 255, cv::NORM_MINMAX, CV_8U);
+    cv::namedWindow("disparity", cv::WINDOW_NORMAL);
+    cv::resizeWindow("disparity", WINDOW_W, WINDOW_H);
+    cv::imshow("disparity", disp_norm);
+
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+    cv::imwrite(save_disp_path, disp);
+    std::cout << "Disparity saved >> " << save_disp_path << std::endl;
+
+    // pcl::io::savePCDFileASCII(save_pcd_path, pcd);
+    // std::cout << "Point Cloud saved >> " << save_pcd_path << std::endl;
 
     return 0;
 }

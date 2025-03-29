@@ -1,0 +1,6 @@
+[submodule "lib"]
+	path = lib
+	url = git@github.com:fixstars/libSGM.git
+[submodule "src/libSGM"]
+	path = src/libSGM
+	url = git@github.com:fixstars/libSGM.git

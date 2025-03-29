@@ -1,0 +1,24 @@
+stereo_matcher:
+  gray_scale : false
+  algorithm : "StereoSGBM"
+  blur_kernel : [3, 3]
+  min_disp : 0
+  max_disp : 256
+  # block_size : 3
+  # p1 : 216 # 8*channel_size*block_size^2
+  # p2 : 864 # 32*channel_size*block_size^2
+  block_size : 5
+  p1 : 600
+  p2 : 2592
+  # block_size : 7
+  # p1 : 1176
+  # p2 : 4704
+  max_diff : 0
+  pre_fc : 0
+  unique_ratio : 0
+  speckle_size : 50
+  speckle_range : 10
+  mode : 1 # cv::StereoSGBM::MODE_HH : 1
+post_filter: # wsl filter refinement
+  wsl_lambda : 6000.0
+  wsl_sigma : 1.0

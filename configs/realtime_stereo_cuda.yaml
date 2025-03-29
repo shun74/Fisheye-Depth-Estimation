@@ -1,0 +1,27 @@
+# stereo vision processor
+image_size : [1280, 960]
+# window_size : [1280, 480]
+window_size : [720, 320]
+image_update_sleep : 10
+viewer_update_sleep : 5
+source_viewer : true
+rectified_viewer : false
+disparity_viewer : true
+point_cloud_viewer : true
+points_size : 4
+coordinate_system : 0.001
+
+# Stereo matcher config
+blur_kernel : [3, 3]
+min_disp : 0
+max_disp : 256 # 64 or 128 or 256
+p1 : 10 # 8*9*7
+p2 : 120 # 32*9*7
+unique_ratio : 0
+mode : 3 # cv::StereoSGBM::MODE_HH : 1
+use_filter : false # disp bilateral filter refinement
+dbf_filter_size : 5
+dbf_refine_iter : 3
+dbf_edge_thresh : 0.1
+dbf_disc_thresh : 0.2
+dbf_sigma_range : 1.1

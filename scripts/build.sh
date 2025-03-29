@@ -7,4 +7,4 @@ fi
 cd build
 cmake -DENABLE_CUDA=ON ..
 # cmake -DENABLE_CUDA=OFF ..
-make
+make -j16

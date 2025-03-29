@@ -1,0 +1,5 @@
+# Calibration sample config
+image_size : [1280, 960]
+board_size : [10, 7]
+square_size : 0.025
+fov : 2.5

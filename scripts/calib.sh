@@ -1,4 +1,4 @@
-build/calibration                             \
+build/app/calibration                         \
   --config      "configs/calibration.conf"    \
   --images_dir  "calib_images"                \
   --output      "configs/camera_params.yaml"  \
