@@ -27,16 +27,26 @@ class StereoVisionProcessorImpl : public StereoVisionProcessor
         pcd_generator_->setBoxLimits(x_min, x_max, y_min, y_max, z_min, z_max);
     }
 
-    void computeDisparity(const cv::Mat &left, const cv::Mat &right, cv::Mat &disparity) override
+    void computeDisparity(cv::InputArray _left, cv::InputArray _right, cv::OutputArray _disparity) override
     {
+        cv::Mat left = _left.getMat();
+        cv::Mat right = _right.getMat();
+        cv::Mat disparity = _disparity.getMat();
+
         stereo_matcher_->computeDisparity(left, right, disparity);
     }
 
-    void computePointCloud(const cv::Mat &left, const cv::Mat &right, cv::Mat &disparity, cv::OutputArray _pcd,
-                           cv::OutputArray _colors, std::vector<bool> &valid) override
+    void computePointCloud(cv::InputArray _left, cv::InputArray _right, cv::InputOutputArray _disparity,
+                           cv::OutputArray _pcd, cv::OutputArray _colors, std::vector<bool> &valid) override
     {
+        cv::Mat left = _left.getMat();
+        cv::Mat right = _right.getMat();
+        cv::Mat disparity = _disparity.getMat();
+        cv::Mat pcd = _pcd.getMat();
+        cv::Mat colors = _colors.getMat();
+
         stereo_matcher_->computeDisparity(left, right, disparity);
-        pcd_generator_->computePointCloud(left, disparity, _pcd, _colors, valid);
+        pcd_generator_->computePointCloud(left, disparity, pcd, colors, valid);
     }
 
   private:

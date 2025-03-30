@@ -61,21 +61,18 @@ bool PointCloudGenerator::calcPoint(int px, int py, float d, cv::Point3f *point)
     return true;
 }
 
-void PointCloudGenerator::computePointCloud(const cv::Mat &disp, cv::OutputArray _pcd, std::vector<bool> &valid)
+void PointCloudGenerator::computePointCloud(const cv::Mat &disp, cv::Mat &pcd, std::vector<bool> &valid)
 {
     int w = disp.size().width;
     int h = disp.size().height;
-
-    _pcd.create(1, w * h, CV_32FC3);
-    cv::Mat pcd = _pcd.getMat();
 
     cv::Point3f *pcd_ptr = pcd.ptr<cv::Point3f>();
     valid.resize(w * h, true);
 
 #pragma omp parallel for
-    for (int py = 0; py < disp.size().height; py++)
+    for (int py = 0; py < h; py++)
     {
-        for (int px = 0; px < disp.size().width; px++)
+        for (int px = 0; px < w; px++)
         {
             float d = static_cast<float>(disp.at<short>(py, px)) / 16.0f;
             if (!calcPoint(px, py, d, &pcd_ptr[py * w + px]))
@@ -89,8 +86,8 @@ void PointCloudGenerator::computePointCloud(const cv::Mat &disp, cv::OutputArray
     }
 }
 
-void PointCloudGenerator::computePointCloud(const cv::Mat &image, const cv::Mat &disp, cv::OutputArray _pcd,
-                                            cv::OutputArray _colors, std::vector<bool> &valid)
+void PointCloudGenerator::computePointCloud(const cv::Mat &image, const cv::Mat &disp, cv::Mat &pcd, cv::Mat &colors,
+                                            std::vector<bool> &valid)
 {
     if (image.size().height * image.size().width != disp.size().height * disp.size().width)
         return;
@@ -98,10 +95,8 @@ void PointCloudGenerator::computePointCloud(const cv::Mat &image, const cv::Mat 
     int w = disp.size().width;
     int h = disp.size().height;
 
-    _pcd.create(1, w * h, CV_32FC3);
-    cv::Mat pcd = _pcd.getMat();
-    _colors.create(1, w * h, CV_8UC3);
-    cv::Mat colors = _colors.getMat();
+    pcd.create(1, h * w, CV_32FC3);
+    colors.create(1, h * w, CV_8UC3);
 
     const cv::Vec3b *image_ptr = image.ptr<cv::Vec3b>();
     cv::Point3f *pcd_ptr = pcd.ptr<cv::Point3f>();
@@ -109,9 +104,9 @@ void PointCloudGenerator::computePointCloud(const cv::Mat &image, const cv::Mat 
     valid.resize(w * h, true);
 
 #pragma omp parallel for
-    for (int py = 0; py < disp.size().height; py++)
+    for (int py = 0; py < h; py++)
     {
-        for (int px = 0; px < disp.size().width; px++)
+        for (int px = 0; px < w; px++)
         {
             float d = static_cast<float>(disp.at<short>(py, px)) / 16.0f;
             if (!calcPoint(px, py, d, &pcd_ptr[py * w + px]))

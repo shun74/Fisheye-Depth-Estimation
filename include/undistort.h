@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include <opencv2/ccalib/omnidir.hpp>
 #include <opencv2/opencv.hpp>
 
 void computeStereoRectifyMaps(cv::Mat K1, cv::Mat K2, cv::Mat D1, cv::Mat D2, cv::Mat R1, cv::Mat R2, cv::Mat P1,

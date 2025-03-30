@@ -34,7 +34,7 @@ void run(StereoVisionProcessor *sv_processor, const std::vector<cv::Mat> &left_m
         std::cerr << "Failed to open video capture." << std::endl;
         return;
     }
-    cap.set(cv::CAP_PROP_BUFFERSIZE, 0);
+    cap.set(cv::CAP_PROP_BUFFERSIZE, 1);
     cap.set(cv::CAP_PROP_FRAME_WIDTH, w * 2);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, h);
 
@@ -54,7 +54,12 @@ void run(StereoVisionProcessor *sv_processor, const std::vector<cv::Mat> &left_m
 
     visualizer.start();
 
-    cv::Mat img, eqrec_left, eqrec_right, eqrec, raw_disp, norm_disp;
+    cv::Mat img(h, w * 2, CV_8UC3);
+    cv::Mat eqrec_left(h, w, CV_8UC3);
+    cv::Mat eqrec_right(h, w, CV_8UC3);
+    cv::Mat eqrec(h, w, CV_8UC3);
+    cv::Mat raw_disp(h, w, CV_16S);
+    cv::Mat norm_disp(h, w, CV_8UC1);
     cv::Mat point_cloud(1, w * h, CV_32FC3);
     cv::Mat colors(1, w * h, CV_8UC3);
     std::vector<bool> valid;

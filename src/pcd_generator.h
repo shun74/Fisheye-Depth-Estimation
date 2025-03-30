@@ -25,8 +25,8 @@ class PointCloudGenerator
 
     void setBoxLimits(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max);
 
-    void computePointCloud(const cv::Mat &disp, cv::OutputArray _pcd, std::vector<bool> &valid);
+    void computePointCloud(const cv::Mat &disp, cv::Mat &pcd, std::vector<bool> &valid);
 
-    void computePointCloud(const cv::Mat &image, const cv::Mat &disp, cv::OutputArray _pcd, cv::OutputArray _colors,
+    void computePointCloud(const cv::Mat &image, const cv::Mat &disp, cv::Mat &pcd, cv::Mat &colors,
                            std::vector<bool> &valid);
 };
