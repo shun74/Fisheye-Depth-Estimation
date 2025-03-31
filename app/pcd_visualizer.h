@@ -82,8 +82,6 @@ class PointCloudVisualizer
 
         render_window_ = vtkSmartPointer<vtkRenderWindow>::New();
         render_window_->AddRenderer(renderer_);
-        const std::string window_name = "Point Cloud";
-        render_window_->SetWindowName(window_name.c_str());
         render_window_->SetSize(width, height);
 
         interactor_ = vtkSmartPointer<vtkRenderWindowInteractor>::New();
@@ -128,8 +126,10 @@ class PointCloudVisualizer
         }
     }
 
-    void updatePointCloud(cv::InputArray _cloud, cv::InputArray _colors, std::vector<bool> &valid)
+    void updatePointCloud(cv::InputArray _cloud, cv::InputArray _colors, std::vector<bool> &valid, float fps = 0.0f)
     {
+        render_window_->SetWindowName(("Point Cloud - FPS: " + std::to_string(fps)).c_str());
+
         cv::Mat cloud = _cloud.getMat();
         const cv::Point3f *cloud_ptr = cloud.ptr<cv::Point3f>();
         cv::Mat colors = _colors.getMat();

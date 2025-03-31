@@ -7,7 +7,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include <stereo_vision.h>
+#include <stereo_vision_cuda.h>
 #include <undistort.h>
 
 #include "pcd_visualizer.h"
@@ -23,7 +23,7 @@ void handle_signal(int signal)
     exit_flag = true;
 }
 
-void run(StereoVisionProcessor *sv_processor, const std::vector<cv::Mat> &left_maps,
+void run(cuda::StereoVisionProcessor *sv_processor, const std::vector<cv::Mat> &left_maps,
          const std::vector<cv::Mat> &right_maps, const cv::Size &img_size)
 {
     int w = img_size.width;
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     std::signal(SIGINT, handle_signal);
 
     // load config file
-    std::string command_line_keys = "{config | configs/realtime_stereo.yaml | path to the config file |}"
+    std::string command_line_keys = "{config | configs/realtime_stereo_cuda.yaml | path to the config file |}"
                                     "{calib | configs/camera_params.yaml | path to the camera parameters file |}";
     cv::CommandLineParser parser(argc, argv, command_line_keys);
     std::string conf_path = parser.get<std::string>("config");
@@ -118,22 +118,18 @@ int main(int argc, char **argv)
     YAML::Node config = YAML::LoadFile(conf_path);
     YAML::Node sm_config = config["stereo_matcher"];
     YAML::Node pf_config = config["post_filter"];
-    bool gray_scale = sm_config["gray_scale"].as<bool>();
-    std::string algorithm = sm_config["algorithm"].as<std::string>();
     cv::Size blur_kernel = cv::Size(sm_config["blur_kernel"][0].as<int>(), sm_config["blur_kernel"][1].as<int>());
-    int block_size = sm_config["block_size"].as<int>();
     int min_disp = sm_config["min_disp"].as<int>();
     int max_disp = sm_config["max_disp"].as<int>();
     int p1 = sm_config["p1"].as<int>();
     int p2 = sm_config["p2"].as<int>();
-    int max_diff = sm_config["max_diff"].as<int>();
-    int pre_fc = sm_config["pre_fc"].as<int>();
     int unique_ratio = sm_config["unique_ratio"].as<int>();
-    int speckle_size = sm_config["speckle_size"].as<int>();
-    int speckle_range = sm_config["speckle_range"].as<int>();
     int mode = sm_config["mode"].as<int>();
-    double wsl_lambda = pf_config["wsl_lambda"].as<double>();
-    double wsl_sigma = pf_config["wsl_sigma"].as<double>();
+    int filter_size = pf_config["filter_size"].as<int>();
+    int refine_iter = pf_config["refine_iter"].as<int>();
+    double edge_thresh = pf_config["edge_thresh"].as<double>();
+    double disc_thresh = pf_config["disc_thresh"].as<double>();
+    double sigma_range = pf_config["sigma_range"].as<double>();
 
     // Load camera parameters yaml file
     cv::FileStorage fs(calib_path, cv::FileStorage::READ);
@@ -163,10 +159,9 @@ int main(int argc, char **argv)
     computeStereoRectifyMaps(K1, K2, D1, D2, R1, R2, P1, P2, img_size, left_maps, right_maps, CV_32F);
     computeEquirectangleMaps(P1, img_size, map_x, map_y);
 
-    std::unique_ptr<StereoVisionProcessor> sv_processor = StereoVisionProcessor::create(
-        gray_scale, algorithm, blur_kernel, min_disp, max_disp, block_size, p1, p2, max_diff, pre_fc, unique_ratio,
-        speckle_size, speckle_range, mode, fx, fy, cx, cy, base_line, map_x, map_y);
-    sv_processor->setPostFilter(wsl_lambda, wsl_sigma);
+    std::unique_ptr<cuda::StereoVisionProcessor> sv_processor = cuda::StereoVisionProcessor::create(
+        blur_kernel, min_disp, max_disp, p1, p2, unique_ratio, mode, fx, fy, cx, cy, base_line, map_x, map_y);
+    sv_processor->setPostFilter(filter_size, refine_iter, edge_thresh, disc_thresh, sigma_range);
 
     run(sv_processor.get(), left_maps, right_maps, img_size);
 

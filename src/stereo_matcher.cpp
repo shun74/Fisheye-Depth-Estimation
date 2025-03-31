@@ -27,7 +27,7 @@ void StereoMatcher::setPostFilter(float lambda, float sigma)
 void StereoMatcher::computeDisparity(const cv::Mat &left, const cv::Mat &right, cv::Mat &disp)
 {
     disp.create(left.size(), CV_16S);
-    
+
     if (gray_scale_)
     {
         cv::cvtColor(left, left, cv::COLOR_BGR2GRAY);

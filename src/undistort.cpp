@@ -36,7 +36,6 @@ void computeEquirectangleMaps(cv::Mat K, cv::Size img_size, cv::Mat &eqrec_map_x
     double cy = K.at<double>(1, 2);
     double rad_x = std::atan(static_cast<double>(img_size.width) / fx);
     double rad_y = std::atan(static_cast<double>(img_size.height) / fy);
-#pragma omp parallel for
     for (int y = 0; y < img_size.height; y++)
     {
         for (int x = 0; x < img_size.width; x++)

@@ -32,3 +32,6 @@ target_link_libraries(single_test FisheyeDepthEstimation_lib ${OpenCV_LIBS} Open
 
 add_executable(realtime_stereo realtime_stereo.cpp)
 target_link_libraries(realtime_stereo FisheyeDepthEstimation_lib ${OpenCV_LIBS} ${VTK_LIBRARIES} OpenMP::OpenMP_CXX yaml-cpp)
+
+add_executable(realtime_stereo_cuda realtime_stereo_cuda.cpp)
+target_link_libraries(realtime_stereo_cuda FisheyeDepthEstimation_cuda_lib ${OpenCV_LIBS} ${VTK_LIBRARIES} OpenMP::OpenMP_CXX yaml-cpp)
