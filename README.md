@@ -1,6 +1,6 @@
 # Fisheye-Depth-Estimation
 
-3D reconstruction by fisheye stereo camera ([CaliCam® Fisheye Stereo Camera](https://astar.ai/products/stereo-camera))
+3D reconstruction by fisheye stereo camera ([CaliCam® Fisheye Camera](https://astar.ai))
 
 Real-time & high quality fisheye stereo 3D reconstruction.
 
@@ -8,8 +8,9 @@ Real-time & high quality fisheye stereo 3D reconstruction.
 ## Environment
 
 * C++ 17
-* OpneCV & OpenCV Contrib 4.7
-* PointCloudLibrary 1.13
+* CUDA 12.0
+* OpneCV & OpenCV Contrib 4.11.0 (+CUDA option)
+* VTK 9.3
 * Python 3.8
 
 OpenCV should be compiled with [OpenEXR](https://openexr.com/en/latest/).
@@ -141,13 +142,6 @@ Therefore, we combined the maps of the rectified conversion and the equirectangu
 * High-quality equirectangular image
 
 <img src="./samples/remap.png" alt="high-quality equirectangular" width="100%"/>
-
-
-## Future update
-
-* CUDA-enabled stereo matching algorithm.
-* Superpixel-based disparity refinement.
-* Building a deep learning-based pipeline.
 
 
 ## For more detail
