@@ -19,8 +19,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
 endif()
 
-include(${VTK_USE_FILE})
-
 add_executable(calibration calibration.cpp)
 target_link_libraries(calibration FisheyeDepthEstimation_lib ${OpenCV_LIBS} OpenMP::OpenMP_CXX yaml-cpp)
 

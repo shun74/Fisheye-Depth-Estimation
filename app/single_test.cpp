@@ -2,11 +2,59 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/viz.hpp>
+#include <opencv2/viz/viz3d.hpp>
+
 #include <stereo_vision.h>
 #include <undistort.h>
 
 #define WINDOW_W 1280
 #define WINDOW_H 960
+
+bool savePointCloudPLY(const cv::Mat &points, const cv::Mat &colors, const std::vector<bool> &valid,
+                       const std::string &filename)
+{
+    try
+    {
+        std::vector<cv::Vec3f> validPoints;
+        std::vector<cv::Vec3b> validColors;
+
+        const float *point_ptr = points.ptr<float>(0);
+        const uchar *color_ptr = colors.empty() ? nullptr : colors.ptr<uchar>(0);
+
+        for (int i = 0; i < static_cast<int>(points.total()); i++)
+        {
+            if (valid.empty() || valid[i])
+            {
+                validPoints.push_back(cv::Vec3f(point_ptr[0], point_ptr[1], point_ptr[2]));
+
+                if (color_ptr)
+                {
+                    validColors.push_back(cv::Vec3b(color_ptr[0], color_ptr[1], color_ptr[2]));
+                }
+            }
+            point_ptr += 3;
+            if (color_ptr)
+                color_ptr += 3;
+        }
+
+        cv::Mat validPointsMat(validPoints.size(), 1, CV_32FC3, validPoints.data());
+        cv::Mat validColorsMat;
+        if (!validColors.empty())
+        {
+            validColorsMat = cv::Mat(validColors.size(), 1, CV_8UC3, validColors.data());
+        }
+
+        cv::viz::writeCloud(filename, validPointsMat, validColorsMat);
+        return true;
+    }
+    catch (const cv::Exception &e)
+    {
+        std::cerr << "Error saving point cloud: " << e.what() << std::endl;
+        return false;
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -16,7 +64,7 @@ int main(int argc, char **argv)
                                     "{calib | configs/camera_params.yaml | path to the camera parameters file}"
                                     "{test_image | images/test-1.jpg | path to the test image}"
                                     "{output_disp | output/test_disp.exr | path to save the disparity map}"
-                                    "{output_pcd | output/test_3d.pcd | path to save the point cloud}";
+                                    "{output_pcd | output/test_3d.ply | path to save the point cloud}";
     cv::CommandLineParser parser(argc, argv, command_line_keys);
 
     std::string conf_path = parser.get<std::string>("config");
@@ -80,7 +128,11 @@ int main(int argc, char **argv)
     sv_processor->setPostFilter(wsl_lambda, wsl_sigma);
 
     // Test
-    cv::Mat img, left, right, converted, disp, disp_norm, color;
+    int w = img_size.width;
+    int h = img_size.height;
+    cv::Mat img, left, right, converted, color;
+    cv::Mat disp(h, w, CV_16S);
+    cv::Mat disp_norm(h, w, CV_8UC1);
     img = cv::imread(img_path);
 
     left = img(cv::Rect(0, 0, img.cols / 2, img.rows)).clone();
@@ -90,8 +142,6 @@ int main(int argc, char **argv)
     color = left.clone();
     cv::hconcat(left, right, converted);
 
-    int w = left.size().width;
-    int h = left.size().height;
     cv::Mat pcd(1, w * h, CV_32FC3);
     cv::Mat colors(1, w * h, CV_8UC3);
     std::vector<bool> valid;
@@ -114,11 +164,18 @@ int main(int argc, char **argv)
     cv::waitKey(0);
     cv::destroyAllWindows();
 
-    cv::imwrite(save_disp_path, disp);
+    cv::Mat disp_float;
+    disp.convertTo(disp_float, CV_32F);
+    cv::imwrite(save_disp_path, disp_float);
     std::cout << "Disparity saved >> " << save_disp_path << std::endl;
 
-    // pcl::io::savePCDFileASCII(save_pcd_path, pcd);
-    // std::cout << "Point Cloud saved >> " << save_pcd_path << std::endl;
+    // Save point cloud
+    if (!savePointCloudPLY(pcd, colors, valid, save_pcd_path))
+    {
+        std::cerr << "Failed to save point cloud." << std::endl;
+        return -1;
+    }
+    std::cout << "Point cloud saved >> " << save_pcd_path << std::endl;
 
     return 0;
 }

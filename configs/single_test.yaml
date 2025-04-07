@@ -16,8 +16,8 @@ stereo_matcher:
   max_diff : 0
   pre_fc : 0
   unique_ratio : 0
-  speckle_size : 50
-  speckle_range : 10
+  speckle_size : 0
+  speckle_range : 0
   mode : 1 # cv::StereoSGBM::MODE_HH : 1
 post_filter: # wsl filter refinement
   wsl_lambda : 6000.0

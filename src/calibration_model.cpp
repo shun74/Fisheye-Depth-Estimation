@@ -91,8 +91,8 @@ class CalibrationModelImpl : public CalibrationModel
         R_ = cv::Mat::ones(3, 3, CV_64F);
         T_ = cv::Mat::ones(3, 1, CV_64F);
 
-        K1_.at<double>(0, 0) = K2_.at<double>(0, 0) = img_size.width * 0.3;
-        K1_.at<double>(1, 1) = K2_.at<double>(1, 1) = img_size.width * 0.3;
+        K1_.at<double>(0, 0) = K2_.at<double>(0, 0) = img_size.width * 0.1;
+        K1_.at<double>(1, 1) = K2_.at<double>(1, 1) = img_size.width * 0.1;
         K1_.at<double>(0, 2) = img_size.width / 2.0;
         K2_.at<double>(0, 2) = img_size.width / 2.0;
         K1_.at<double>(1, 2) = img_size.height / 2.0;
