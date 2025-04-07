@@ -59,7 +59,8 @@ Some configurations required for each step. Check [config files](./configs/).
 
 * 3D viewer sample
 
-https://github.com/shun74/Fisheye-Depth-Estimation/blob/main/samples/demo.mp4
+<video src="https://github.com/shun74/Fisheye-Depth-Estimation/blob/main/samples/demo.mp4" controls="controls">
+</video>
 
 
 ## How does it work ?
