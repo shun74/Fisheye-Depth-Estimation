@@ -59,7 +59,7 @@ Some configurations required for each step. Check [config files](./configs/).
 
 * 3D viewer sample
 
-<img src="./samples/demo.mp4" alt="point_cloud" width="100%"/>
+https://github.com/shun74/Fisheye-Depth-Estimation/blob/main/samples/demo.mp4
 
 
 ## How does it work ?
