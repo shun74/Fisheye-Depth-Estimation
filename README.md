@@ -59,7 +59,7 @@ Some configurations required for each step. Check [config files](./configs/).
 
 * 3D viewer sample
 
-![demo](./samples/demo.webp)
+<img src="./samples/demo.webp" alt="3D viewer sample" width="100%" />
 
 
 ## How does it work ?
