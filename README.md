@@ -11,7 +11,6 @@ Real-time & high quality fisheye stereo 3D reconstruction.
 * CUDA 12.0
 * OpneCV & OpenCV Contrib 4.11.0 (+CUDA option)
 * VTK 9.3
-* Python 3.8
 
 OpenCV should be compiled with [OpenEXR](https://openexr.com/en/latest/).
 
@@ -32,6 +31,11 @@ To remove camera distortion and stereo recitfication, calibrate camera with chec
 sh scripts/calib.sh
 ```
 
+Currently, the calibration doesn't work with OpenCV 4.11.0. (it works with 4.2.0.)  
+Please check following issue: https://github.com/opencv/opencv/issues/23962
+
+Important note: The calibration doesn't work due to OpenCV issue at 4.11.0. (it works with 4.2.0.)
+
 ### Test 3D reconstruction
 
 Before proceeding with real-time 3D reconstruction, verify the calibration results and parameters by testing a single-shot image.
@@ -46,20 +50,16 @@ sh scripts/reconstruct.sh
 sh scripts/realtime.sh
 ```
 
-Some configurations required for each step. See [config files](./configs/).
+Some configurations required for each step. Check [config files](./configs/).
 
 
 ## Result
 
-**build/test**
+15~20FPS (i7-13700KF + RTX 4070)
 
-* Original
+* 3D viewer sample
 
-<img src="./samples/test.jpg" alt="original" width="100%"/>
-
-* 3D preview ([Cloud Compare](https://www.danielgm.net/cc/))
-
-<img src="./samples/preview.webp" alt="point_cloud" width="100%"/>
+<img src="./samples/demo.mp4" alt="point_cloud" width="100%"/>
 
 
 ## How does it work ?
